@@ -59,8 +59,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for line in fobj.readlines():
                 self.commandRegisterList.model.item(i).setText(line.strip('\n'))
                 i += 1
-                self.commandRegisterList.model.appendRow(
-                        CommandRegisterItem(""))
+                if self.commandRegisterList.model.item(i) is None:
+                    self.commandRegisterList.model.appendRow(
+                            CommandRegisterItem(""))
 
     def saveButtonClicked(self):
         fname = QFileDialog.getSaveFileName(

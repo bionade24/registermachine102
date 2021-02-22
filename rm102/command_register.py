@@ -55,7 +55,7 @@ class CommandRegisterItemModel(QStandardItemModel):
         elif cmd == CMD.STORE:
             registerList.item(res - 1).value = self.accu
         elif cmd == CMD.JMP:
-            cmd_reg_row_next = res - 1
+            cmd_reg_row = res - 2
         cmd_reg_row_next = cmd_reg_row + 1
         if run_all and cmd_reg_row_next < self.rowCount():
             self.exec(cmd_reg_row_next, registerList, run_all)

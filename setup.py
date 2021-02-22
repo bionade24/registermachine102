@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name = "registermachine102",
+    name = "rm102",
     version = "0.1",
-    description = "Better implementation of rm101, a fake assembler for educational purposes.",
+    description = "Registermachine 102: Better implementation of rm101, a fake assembler for educational purposes.",
     long_description= long_description,
     long_description_content_type="text/markdown",
     url = "https://github.com/bionade24/registermachine102",
@@ -30,5 +30,5 @@ setup(
     ],
     install_requires = ["argparse", "docker-compose"],
     packages = ["rm102"],
-    scripts = ["main.py"]
+    scripts = ["bin/rm102"]
 )

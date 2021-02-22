@@ -53,15 +53,15 @@ class CommandRegisterItemModel(QStandardItemModel):
             cmd, res = self.command_dict[command[0]](
                     int(command[1]), self.accu, self.check_for_register(
                         command[0], int(command[1]), registerList))
-        except:
+            if cmd == CMD.ACC:
+                self.accu = res
+            elif cmd == CMD.STORE:
+                registerList.item(res - 1).value = self.accu
+            elif cmd == CMD.JMP:
+                cmd_reg_row = res - 2
+        except BaseException:
             self.update_gui.emit(cmd_reg_row, self.accu, True)
             return
-        if cmd == CMD.ACC:
-            self.accu = res
-        elif cmd == CMD.STORE:
-            registerList.item(res - 1).value = self.accu
-        elif cmd == CMD.JMP:
-            cmd_reg_row = res - 2
         cmd_reg_row_next = cmd_reg_row + 1
         if run_all and cmd_reg_row_next < self.rowCount():
             self.exec(cmd_reg_row_next, registerList, run_all)

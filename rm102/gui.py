@@ -1,7 +1,6 @@
-import os
 from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
-from PyQt5.QtGui import QStandardItemModel, QBrush, QColorConstants
+from PyQt5.QtGui import QBrush, QColorConstants
 from PyQt5 import QtCore
 from rm102.mainwindow import Ui_MainWindow
 from rm102.command_register import CommandRegisterList, CommandRegisterItem

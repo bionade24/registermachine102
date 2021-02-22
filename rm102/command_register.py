@@ -22,12 +22,18 @@ class CommandRegisterItemModel(QStandardItemModel):
             "MULT": lambda val, acc, reg: (CMD.ACC, acc * reg),
             "DIV": lambda val, acc, reg: (CMD.ACC, acc // reg),
             "JUMP": lambda val, acc, reg: (CMD.JMP, val),
-            "JGE": lambda val, acc, reg: (CMD.JMP, val) if acc >= 0 else None,
-            "JGT": lambda val, acc, reg: (CMD.JMP, val) if acc > 0 else None,
-            "JLE": lambda val, acc, reg: (CMD.JMP, val) if acc <= 0 else None,
-            "JLT": lambda val, acc, reg: (CMD.JMP, val) if acc < 0 else None,
-            "JEQ": lambda val, acc, reg: (CMD.JMP, val) if acc == 0 else None,
-            "JNE": lambda val, acc, reg: (CMD.JMP, val) if acc != 0 else None
+            "JGE": lambda val, acc, reg: (CMD.JMP, val) if acc >= 0 else (
+                None, None),
+            "JGT": lambda val, acc, reg: (CMD.JMP, val) if acc > 0 else (
+                None, None),
+            "JLE": lambda val, acc, reg: (CMD.JMP, val) if acc <= 0 else (
+                None, None),
+            "JLT": lambda val, acc, reg: (CMD.JMP, val) if acc < 0 else (
+                None, None),
+            "JEQ": lambda val, acc, reg: (CMD.JMP, val) if acc == 0 else (
+                None, None),
+            "JNE": lambda val, acc, reg: (CMD.JMP, val) if acc != 0 else (
+                None, None)
     }
 
     update_gui = QtCore.pyqtSignal(int, int, bool)

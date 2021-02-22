@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
 from PyQt5.QtGui import QStandardItemModel, QBrush, QColorConstants
@@ -57,7 +58,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         with open(fname[0], 'r') as fobj:
             i = 0
             for line in fobj.readlines():
-                self.commandRegisterList.model.item(i).setText(line)
+                self.commandRegisterList.model.item(i).setText(line.strip('\n'))
                 i += 1
                 self.commandRegisterList.model.appendRow(
                         CommandRegisterItem(""))
@@ -71,7 +72,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             fname = fname[0]
         with open(fname, 'w') as fobj:
             for i in range(0, self.commandRegisterList.model.rowCount()-1):
-                fobj.write(self.commandRegisterList.model.item(i).text()
+                fobj.write(self.commandRegisterList.model.item(i).text().strip('\n')
                            + '\n')
 
 

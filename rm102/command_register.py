@@ -125,6 +125,11 @@ class CommandRegisterList(QTableView):
             self.model.insertRow(self.selectedIndexes()[0].row(),
                                  CommandRegisterItem())
         elif event.key() == QtCore.Qt.Key_Delete:
-            self.model.takeRow(self.selectedIndexes()[0].row())
-        super(QTableView, self).keyPressEvent(event)
+            try:
+                index = self.selectedIndexes()[0].row()
+            except IndexError:
+                index = 0
+            if index != 0:
+                self.model.takeRow(index)
+            super(QTableView, self).keyPressEvent(event)
 

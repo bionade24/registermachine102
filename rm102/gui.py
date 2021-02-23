@@ -59,6 +59,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.reset()
         fname = QFileDialog.getOpenFileName(
                 self, 'Open file', str(Path.home()), "rm102 files (*.rm102)")
+        if fname[0] == '':
+            return
         with open(fname[0], 'r') as fobj:
             i = 0
             for line in fobj.readlines():
@@ -71,6 +73,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def saveButtonClicked(self):
         fname = QFileDialog.getSaveFileName(
                 self, 'Save file', str(Path.home()), "rm102 files (*.rm102)")
+        if fname[0] == '':
+            return
         if not fname[0].endswith('.rm102'):
             fname = fname[0] + '.rm102'
         else:

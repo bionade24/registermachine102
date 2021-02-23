@@ -91,6 +91,7 @@ class CommandRegisterItemModel(QStandardItemModel):
 class CommandRegisterItem(QStandardItem):
 
     def __init__(self, *args, **kwargs):
+
         super(CommandRegisterItem, self).__init__(*args, **kwargs)
         font = QFont()
         font.setCapitalization(QFont.AllUppercase)
@@ -118,18 +119,18 @@ class CommandRegisterList(QTableView):
         self.setColumnWidth(0, self.width())
 
     def keyPressEvent(self, event):
+        try:
+            index = self.selectedIndexes()[0]
+        except IndexError:
+            index = self.model.index(0, 0)
         if event.key() == QtCore.Qt.Key_Return:
-            self.model.insertRow(self.selectedIndexes()[0].row() + 1,
-                                 CommandRegisterItem())
+            self.model.insertRow(index.row() + 1, CommandRegisterItem())
         elif event.key() == QtCore.Qt.Key_Insert:
-            self.model.insertRow(self.selectedIndexes()[0].row(),
-                                 CommandRegisterItem())
+            self.model.insertRow(index.row(), CommandRegisterItem())
         elif event.key() == QtCore.Qt.Key_Delete:
-            try:
-                index = self.selectedIndexes()[0].row()
-            except IndexError:
-                index = 0
-            if index != 0:
-                self.model.takeRow(index)
-            super(QTableView, self).keyPressEvent(event)
+            if index.row() != 0:
+                self.model.takeRow(index.row())
+        elif event.key() == QtCore.Qt.Key_Left or event.key() == QtCore.Qt.Key_Right:
+            self.edit(index)
+        super(QTableView, self).keyPressEvent(event)
 

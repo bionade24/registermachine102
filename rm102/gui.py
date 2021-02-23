@@ -30,8 +30,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def update_gui(self, reg_count, acc, error):
         self.lcdNumAcc.display(acc)
         self.lcdNumCmdReg.display(reg_count + 1)
-        self.commandRegisterList.model.item(reg_count).setBackground(
-                QBrush(QColorConstants.Red if error else QColorConstants.Blue))
+        try:
+            self.commandRegisterList.model.item(reg_count).setBackground(
+                    QBrush(QColorConstants.Red if error else QColorConstants.Blue))
+        except AttributeError:
+            self.commandRegisterList.model.appendRow(CommandRegisterItem(""))
+            self.commandRegisterList.model.item(reg_count).setBackground(
+                    QBrush(QColorConstants.Red if error else QColorConstants.Red))
 
     def runButtonClicked(self):
         self.commandRegisterList.model.run(self.regListModel)

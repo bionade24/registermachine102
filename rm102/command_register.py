@@ -98,7 +98,7 @@ class CommandRegisterItem(QStandardItem):
 
     def setData(self, value, role=QtCore.Qt.UserRole + 1):
         if role == QtCore.Qt.EditRole:
-            value = str(value).upper()
+            value = str(value).strip(' ').upper()
         return QStandardItem.setData(self, value, role)
 
 

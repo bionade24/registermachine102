@@ -49,7 +49,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.commandRegisterList.model.accu = 0
         self.lcdNumAcc.display(0)
         self.lcdNumCmdReg.display(1)
-        for i in range(0, self.commandRegisterList.model.rowCount()-1):
+        for i in range(0, self.commandRegisterList.model.rowCount()):
             self.commandRegisterList.model.item(i).setBackground(QBrush())
         for i in range(1, self.regListModel.rowCount()):
             self.regListModel.takeRow(1)

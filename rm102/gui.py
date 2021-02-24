@@ -1,6 +1,6 @@
 from pathlib import Path
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
-from PyQt5.QtGui import QBrush, QColorConstants
+from PyQt5.QtGui import QBrush, QColorConstants, QPalette
 from PyQt5 import QtCore
 from rm102.mainwindow import Ui_MainWindow
 from rm102.command_register import CommandRegisterList, CommandRegisterItem
@@ -45,7 +45,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.commandRegisterList.model.step(self.lcdNumCmdReg.intValue() - 1,
                                             self.regListModel)
 
-    def reset(self):
+    def reset(self, remove_stopper=False):
         self.commandRegisterList.model.accu = 0
         self.lcdNumAcc.display(0)
         self.lcdNumCmdReg.display(1)
@@ -54,9 +54,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         for i in range(1, self.regListModel.rowCount()):
             self.regListModel.takeRow(1)
         self.regListModel.item(0).value = 0
+        if remove_stopper:
+            cmd_mod = self.commandRegisterList.model
+            if cmd_mod.stop is not None:
+                cmd_mod.item(cmd_mod.stop).setForeground(QPalette().text())
+                cmd_mod.stop = None
 
     def loadButtonClicked(self):
-        self.reset()
+        self.reset(remove_stopper=True)
         fname = QFileDialog.getOpenFileName(
                 self, 'Open file', str(Path.home()), "rm102 files (*.rm102)")
         if fname[0] == '':

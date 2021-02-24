@@ -1,5 +1,6 @@
 from enum import IntEnum
-from PyQt5.QtGui import QStandardItem, QFont, QStandardItemModel
+from PyQt5.QtGui import QStandardItem, QFont, QStandardItemModel, \
+        QBrush, QColorConstants, QPalette
 from PyQt5.QtWidgets import QTableView
 from PyQt5 import QtCore
 from rm102.register import RegisterItem
@@ -41,6 +42,7 @@ class CommandRegisterItemModel(QStandardItemModel):
     def __init__(self, *args, **kwargs):
         super(CommandRegisterItemModel, self).__init__(*args, **kwargs)
         self.accu = 0
+        self.stop = None
 
     def exec(self, cmd_reg_row, registerList, run_all=False):
         command = self.item(cmd_reg_row).text().strip('\n').split(' ')
@@ -63,11 +65,12 @@ class CommandRegisterItemModel(QStandardItemModel):
             self.update_gui.emit(cmd_reg_row, self.accu, True)
             return
         cmd_reg_row_next = cmd_reg_row + 1
-        if run_all and cmd_reg_row_next < self.rowCount():
+        if run_all and cmd_reg_row_next < self.rowCount() and \
+           (self.stop is None or self.stop >= cmd_reg_row_next):
             self.exec(cmd_reg_row_next, registerList, run_all)
         else:
             self.update_gui.emit(cmd_reg_row_next, self.accu,
-                                 True if run_all else False)
+                                 True if run_all and self.stop is None else False)
 
     def check_for_register(self, cmd, val, registerList):
         reg = registerList.item(val - 1)
@@ -133,4 +136,20 @@ class CommandRegisterList(QTableView):
         elif event.key() == QtCore.Qt.Key_Left or event.key() == QtCore.Qt.Key_Right:
             self.edit(index)
         super(QTableView, self).keyPressEvent(event)
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.RightButton:
+            index = self.indexAt(event.localPos().toPoint())
+            if index.row() >= 0:
+                # Explicitly allow 0
+                if self.model.stop is not None:
+                    self.model.item(self.model.stop).setForeground(
+                            QPalette().text())
+                    if self.model.stop == index.row():
+                        self.model.stop = None
+                        return
+                self.model.stop = index.row()
+                self.model.itemFromIndex(index).setForeground(
+                        QBrush(QColorConstants.Yellow))
+        super(QTableView, self).mousePressEvent(event)
 

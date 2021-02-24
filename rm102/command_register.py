@@ -45,6 +45,7 @@ class CommandRegisterItemModel(QStandardItemModel):
         self.stop = None
 
     def exec(self, cmd_reg_row, registerList, run_all=False):
+        cmd_reg_row_next = None
         command = self.item(cmd_reg_row).text().strip('\n').split(' ')
         # Special case for END
         if command[0] == "END":
@@ -60,15 +61,17 @@ class CommandRegisterItemModel(QStandardItemModel):
             elif cmd == CMD.STORE:
                 registerList.item(res - 1).value = self.accu
             elif cmd == CMD.JMP:
-                cmd_reg_row = res - 2
+                cmd_reg_row_next = res - 1
         except BaseException:
             self.update_gui.emit(cmd_reg_row, self.accu, True)
             return
-        cmd_reg_row_next = cmd_reg_row + 1
+        if not cmd_reg_row_next:
+            cmd_reg_row_next = cmd_reg_row + 1
         if run_all and cmd_reg_row_next < self.rowCount() and \
            (self.stop is None or self.stop >= cmd_reg_row_next):
             self.exec(cmd_reg_row_next, registerList, run_all)
         else:
+            self.item(cmd_reg_row).setBackground(QBrush())
             self.update_gui.emit(cmd_reg_row_next, self.accu,
                                  True if run_all and self.stop is None else False)
 

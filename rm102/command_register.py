@@ -60,6 +60,7 @@ class CommandRegisterItemModel(QStandardItemModel):
                 self.accu = res
             elif cmd == CMD.STORE:
                 registerList.item(res - 1).value = self.accu
+                print(registerList.item(res - 1).value)
             elif cmd == CMD.JMP:
                 cmd_reg_row_next = res - 1
         except BaseException:
@@ -106,6 +107,7 @@ class CommandRegisterItem(QStandardItem):
     def setData(self, value, role=QtCore.Qt.UserRole + 1):
         if role == QtCore.Qt.EditRole:
             value = str(value).strip(' ').upper()
+            self.emitDataChanged()
         return QStandardItem.setData(self, value, role)
 
 

@@ -20,6 +20,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+        self.filepath = None
         self.setupUi(self)
         self.setWindowTitle("RegisterMachine 102")
         self.regListModel = RegisterItemModel()
@@ -32,6 +33,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.resetButton.clicked.connect(self.reset)
         self.loadButton.clicked.connect(self.loadButtonClicked)
         self.saveButton.clicked.connect(self.saveButtonClicked)
+        self.saveUnderButton.clicked.connect(self.saveUnderButtonClicked)
         self.helpButton.clicked.connect(lambda: HelpDialog(self).show())
         self.commandRegisterList.model.update_gui.connect(self.update_gui)
         self.show()
@@ -87,10 +89,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.commandRegisterList.model.item(i) is None:
                     self.commandRegisterList.model.appendRow(
                             CommandRegisterItem(""))
+        self.file_is_open(fname[0])
 
     def saveButtonClicked(self):
-        fname = QFileDialog.getSaveFileName(
+        if self.filepath is None:
+            fname = QFileDialog.getSaveFileName(
                 self, 'Save file', str(Path.home()), "rm102 files (*.rm102)")
+        else:
+            fname = [self.filepath]
         if fname[0] == '':
             return
         if not fname[0].endswith('.rm102'):
@@ -101,6 +107,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             for i in range(0, self.commandRegisterList.model.rowCount()-1):
                 fobj.write(self.commandRegisterList.model.item(i).text().strip('\n')
                            + '\n')
+        self.file_is_open(fname)
+
+    def saveUnderButtonClicked(self):
+        self.filepath = None
+        self.saveButtonClicked()
+
+    def file_is_open(self, path):
+        self.filepath = path
+        self.setWindowTitle(f"RegisterMachine 102 - {path}")
 
 
 def main(argv=None):

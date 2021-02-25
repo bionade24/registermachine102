@@ -59,8 +59,7 @@ class CommandRegisterItemModel(QStandardItemModel):
             if cmd == CMD.ACC:
                 self.accu = res
             elif cmd == CMD.STORE:
-                registerList.item(res - 1).value = self.accu
-                print(registerList.item(res - 1).value)
+                registerList.item(res - 1).setValue(self.accu)
             elif cmd == CMD.JMP:
                 cmd_reg_row_next = res - 1
         except BaseException:
@@ -79,7 +78,7 @@ class CommandRegisterItemModel(QStandardItemModel):
     def check_for_register(self, cmd, val, registerList):
         reg = registerList.item(val - 1)
         if type(reg) is RegisterItem:
-            return reg.value
+            return reg.value()
         else:
             if cmd == 'STORE':
                 for i in range(registerList.rowCount(), val):

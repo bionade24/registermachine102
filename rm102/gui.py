@@ -53,7 +53,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.commandRegisterList.model.item(i).setBackground(QBrush())
         for i in range(1, self.regListModel.rowCount()):
             self.regListModel.takeRow(1)
-        self.regListModel.item(0).value = 0
+        self.regListModel.item(0).setValue(0)
         if remove_stopper:
             cmd_mod = self.commandRegisterList.model
             if cmd_mod.stop is not None:

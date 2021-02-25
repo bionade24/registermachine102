@@ -71,9 +71,9 @@ class CommandRegisterItemModel(QStandardItemModel):
            (self.stop is None or self.stop >= cmd_reg_row_next):
             self.exec(cmd_reg_row_next, registerList, run_all)
         else:
-            self.item(cmd_reg_row).setBackground(QBrush())
             self.update_gui.emit(cmd_reg_row_next, self.accu,
                                  True if run_all and self.stop is None else False)
+            self.item(cmd_reg_row).setBackground(QBrush())
 
     def check_for_register(self, cmd, val, registerList):
         reg = registerList.item(val - 1)

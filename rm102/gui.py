@@ -1,5 +1,5 @@
 from pathlib import Path
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog
 from PyQt5.QtGui import QBrush, QColorConstants, QPalette
 from PyQt5 import QtCore
 from rm102.mainwindow import Ui_MainWindow
@@ -13,6 +13,7 @@ class HelpDialog(QDialog, Ui_Dialog):
     def __init__(self, *args, **kwargs):
         super(HelpDialog, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.setWindowTitle("RegisterMachine 102 - Hilfe")
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):

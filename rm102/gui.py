@@ -50,6 +50,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def runButtonClicked(self):
         self.commandRegisterList.model.run(self.regListModel)
+        if self.commandRegisterList.model.stop is not None:
+            self.runButton.setEnabled(False)
 
     def stepButtonClicked(self):
         self.commandRegisterList.model.step(self.lcdNumCmdReg.intValue() - 1,
@@ -59,6 +61,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.commandRegisterList.model.accu = 0
         self.lcdNumAcc.display(0)
         self.lcdNumCmdReg.display(1)
+        self.runButton.setEnabled(True)
         for i in range(0, self.commandRegisterList.model.rowCount()):
             self.commandRegisterList.model.item(i).setBackground(QBrush())
         for i in range(1, self.regListModel.rowCount()):

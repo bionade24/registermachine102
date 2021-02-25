@@ -160,6 +160,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="helpButton">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>350</y>
+      <width>109</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hilfe</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -167,7 +180,7 @@
      <x>0</x>
      <y>0</y>
      <width>715</width>
-     <height>34</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>

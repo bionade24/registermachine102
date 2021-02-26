@@ -131,7 +131,7 @@ class CommandRegisterList(QTableView):
             index = self.selectedIndexes()[0]
         except IndexError:
             index = self.model.index(0, 0)
-        if event.key() == QtCore.Qt.Key_Return:
+        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
             self.model.insertRow(index.row() + 1, CommandRegisterItem())
             self.setCurrentIndex(self.model.index(index.row() + 1, 0))
         elif event.key() == QtCore.Qt.Key_Insert:

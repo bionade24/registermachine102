@@ -132,11 +132,14 @@ class CommandRegisterList(QTableView):
             index = self.model.index(0, 0)
         if event.key() == QtCore.Qt.Key_Return:
             self.model.insertRow(index.row() + 1, CommandRegisterItem())
+            self.setCurrentIndex(self.model.index(index.row() + 1, 0))
         elif event.key() == QtCore.Qt.Key_Insert:
             self.model.insertRow(index.row(), CommandRegisterItem())
+            self.setCurrentIndex(self.model.index(index.row(), 0))
         elif event.key() == QtCore.Qt.Key_Delete:
             if index.row() != 0:
                 self.model.takeRow(index.row())
+                self.setCurrentIndex(self.model.index(index.row() - 1, 0))
         elif event.key() == QtCore.Qt.Key_Left or event.key() == QtCore.Qt.Key_Right:
             self.edit(index)
         super(QTableView, self).keyPressEvent(event)

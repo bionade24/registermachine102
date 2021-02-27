@@ -1,5 +1,6 @@
 from pathlib import Path
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QFileDialog, QDialog,
+  QMessageBox)
 from PyQt5.QtGui import QBrush, QColorConstants, QPalette
 from PyQt5 import QtCore
 from rm102.mainwindow import Ui_MainWindow
@@ -20,11 +21,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
-        self.filepath = None
         self.setupUi(self)
         self.setWindowTitle("RegisterMachine 102")
         self.regListModel = RegisterItemModel()
         self.commandRegisterList = CommandRegisterList(self.centralwidget)
+        self.commandRegisterList.model.data_changed.connect(self.register_changed)
         self.reglistView.setModel(self.regListModel)
         self.regListModel.appendRow(RegisterItem(1))
         self.lcdNumCmdReg.display(1)
@@ -36,6 +37,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.saveUnderButton.clicked.connect(self.saveUnderButtonClicked)
         self.helpButton.clicked.connect(lambda: HelpDialog(self).show())
         self.commandRegisterList.model.update_gui.connect(self.update_gui)
+        self.file_is_open(None, True)
         self.show()
 
     @QtCore.pyqtSlot(int, int, bool, name="update_gui")
@@ -50,10 +52,34 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.commandRegisterList.model.item(reg_count).setBackground(
                     QBrush(QColorConstants.Red if error else QColorConstants.Red))
 
+    def register_changed(self):
+        self.file_is_open(self.filepath, False)
+
     def runButtonClicked(self):
         self.commandRegisterList.model.run(self.regListModel)
         if self.commandRegisterList.model.stop is not None:
             self.runButton.setEnabled(False)
+
+    def closeEvent(self, event):
+        if not self.changes_saved:
+            filename = filename = self.filepath.split('/')[-1] if self.filepath else 'Unbenannt'
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setWindowTitle("Änderungen speichern?")
+            msg.setText(
+                f"Sollen die Änderungen an {filename} gespeichert werden?")
+            msg.setStandardButtons(
+                QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
+            msg.setEscapeButton(QMessageBox.Cancel)
+            result = msg.exec()
+
+            if result == QMessageBox.Cancel:
+                event.ignore()
+            if result == QMessageBox.Save:
+                self.saveButtonClicked()
+                event.accept()
+            else:
+                event.accept()
 
     def stepButtonClicked(self):
         self.commandRegisterList.model.step(self.lcdNumCmdReg.intValue() - 1,
@@ -89,7 +115,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.commandRegisterList.model.item(i) is None:
                     self.commandRegisterList.model.appendRow(
                             CommandRegisterItem(""))
-        self.file_is_open(fname[0])
+        self.file_is_open(fname[0], True)
 
     def saveButtonClicked(self):
         if self.filepath is None:
@@ -108,15 +134,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 if self.commandRegisterList.model.item(i).text() != '':
                     fobj.write(self.commandRegisterList.model.item(i).text().strip('\n')
                                + '\n')
-        self.file_is_open(fname)
+        self.file_is_open(fname, True)
 
     def saveUnderButtonClicked(self):
         self.filepath = None
         self.saveButtonClicked()
 
-    def file_is_open(self, path):
+    def file_is_open(self, path, saved):
         self.filepath = path
-        self.setWindowTitle(f"RegisterMachine 102 - {path}")
+        self.changes_saved = saved
+
+        prefix = '' if saved else '*'
+        filename = self.filepath.split('/')[-1] if self.filepath \
+          else 'Unbenannt'
+        self.setWindowTitle(f"RegisterMachine 102 - {prefix}{filename}")
 
 
 def main(argv=None):

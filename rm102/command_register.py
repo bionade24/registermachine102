@@ -62,6 +62,7 @@ class CommandRegisterItemModel(QStandardItemModel):
                 registerList.item(res - 1).setValue(self.accu)
             elif cmd == CMD.JMP:
                 cmd_reg_row_next = res - 1
+                self.item(cmd_reg_row_next).isEnabled()
         except BaseException:
             self.update_gui.emit(cmd_reg_row, self.accu, True)
             return

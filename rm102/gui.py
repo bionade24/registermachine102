@@ -104,9 +104,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             fname = fname[0]
         with open(fname, 'w') as fobj:
-            for i in range(0, self.commandRegisterList.model.rowCount()-1):
-                fobj.write(self.commandRegisterList.model.item(i).text().strip('\n')
-                           + '\n')
+            for i in range(0, self.commandRegisterList.model.rowCount()):
+                if self.commandRegisterList.model.item(i).text() != '':
+                    fobj.write(self.commandRegisterList.model.item(i).text().strip('\n')
+                               + '\n')
         self.file_is_open(fname)
 
     def saveUnderButtonClicked(self):

@@ -36,8 +36,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.saveUnderButton.clicked.connect(self.saveUnderButtonClicked)
         self.helpButton.clicked.connect(lambda: HelpDialog(self).show())
         self.commandRegisterList.model.update_gui.connect(self.update_gui)
-        self.commandRegisterList.model.cells_changed.connect(self.register_changed)
-        self.commandRegisterList.model.itemChanged.connect(self.register_changed)
+        self.commandRegisterList.model.cells_changed.connect(
+                lambda: self.file_is_open(self.filepath, False))
+        self.commandRegisterList.model.itemChanged.connect(
+                lambda: self.file_is_open(self.filepath, False))
         self.file_is_open(None, True)
         self.show()
 
@@ -52,9 +54,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.commandRegisterList.model.appendRow(CommandRegisterItem(""))
             self.commandRegisterList.model.item(reg_count).setBackground(
                     QBrush(QColorConstants.Red if error else QColorConstants.Red))
-
-    def register_changed(self):
-        self.file_is_open(self.filepath, False)
 
     def runButtonClicked(self):
         self.commandRegisterList.model.run(self.regListModel)

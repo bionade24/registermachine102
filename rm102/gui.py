@@ -37,6 +37,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.helpButton.clicked.connect(lambda: HelpDialog(self).show())
         self.commandRegisterList.model.update_gui.connect(self.update_gui)
         self.commandRegisterList.model.cells_changed.connect(self.register_changed)
+        self.commandRegisterList.model.itemChanged.connect(self.register_changed)
         self.file_is_open(None, True)
         self.show()
 

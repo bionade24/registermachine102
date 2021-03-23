@@ -38,7 +38,7 @@ class CommandRegisterItemModel(QStandardItemModel):
     }
 
     update_gui = QtCore.pyqtSignal(int, int, bool)
-    data_changed = QtCore.pyqtSignal()
+    cells_changed = QtCore.pyqtSignal()
 
     def __init__(self, *args, **kwargs):
         super(CommandRegisterItemModel, self).__init__(*args, **kwargs)
@@ -135,16 +135,16 @@ class CommandRegisterList(QTableView):
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
             self.model.insertRow(index.row() + 1, CommandRegisterItem())
             self.setCurrentIndex(self.model.index(index.row() + 1, 0))
-            self.model.data_changed.emit()
+            self.model.cells_changed.emit()
         elif event.key() == QtCore.Qt.Key_Insert:
             self.model.insertRow(index.row(), CommandRegisterItem())
             self.setCurrentIndex(self.model.index(index.row(), 0))
-            self.model.data_changed.emit()
+            self.model.cells_changed.emit()
         elif event.key() == QtCore.Qt.Key_Delete:
             if index.row() != 0:
                 self.model.takeRow(index.row())
                 self.setCurrentIndex(self.model.index(index.row() - 1, 0))
-                self.model.data_changed.emit()
+                self.model.cells_changed.emit()
         elif event.key() == QtCore.Qt.Key_Left or event.key() == QtCore.Qt.Key_Right:
             self.edit(index)
         super(QTableView, self).keyPressEvent(event)

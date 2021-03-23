@@ -1,6 +1,6 @@
 from pathlib import Path
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QFileDialog, QDialog,
-  QMessageBox)
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog, \
+    QMessageBox
 from PyQt5.QtGui import QBrush, QColorConstants, QPalette
 from PyQt5 import QtCore
 from rm102.mainwindow import Ui_MainWindow

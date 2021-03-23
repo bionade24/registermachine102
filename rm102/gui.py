@@ -25,7 +25,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setWindowTitle("RegisterMachine 102")
         self.regListModel = RegisterItemModel()
         self.commandRegisterList = CommandRegisterList(self.centralwidget)
-        self.commandRegisterList.model.data_changed.connect(self.register_changed)
         self.reglistView.setModel(self.regListModel)
         self.regListModel.appendRow(RegisterItem(1))
         self.lcdNumCmdReg.display(1)
@@ -37,6 +36,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.saveUnderButton.clicked.connect(self.saveUnderButtonClicked)
         self.helpButton.clicked.connect(lambda: HelpDialog(self).show())
         self.commandRegisterList.model.update_gui.connect(self.update_gui)
+        self.commandRegisterList.model.cells_changed.connect(self.register_changed)
         self.file_is_open(None, True)
         self.show()
 

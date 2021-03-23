@@ -75,7 +75,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             if result == QMessageBox.Cancel:
                 event.ignore()
-            if result == QMessageBox.Save:
+            elif result == QMessageBox.Save:
                 self.saveButtonClicked()
                 event.accept()
             else:

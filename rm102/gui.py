@@ -107,6 +107,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self, 'Open file', str(Path.home()), "rm102 files (*.rm102)")
         if fname[0] == '':
             return
+        for i in range(self.commandRegisterList.model.rowCount()-1, 0, -1):
+            self.commandRegisterList.model.takeRow(i)
         with open(fname[0], 'r') as fobj:
             i = 0
             for line in fobj.readlines():

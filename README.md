@@ -17,8 +17,16 @@ Package rm102 to a single excutable for Linux, macOS or Windows
 
 Linux and Mac:  
 =
-`pyinstaller --noconsole --onefile ./bin/rm102`
+```
+pyuic5 -o rm102/mainwindow.py mainwindow.ui
+pyuic5 -o rm102/help_dialog.py help_dialog.ui
+pyinstaller --noconsole --onefile ./bin/rm102
+```
 
 Windows:  
 =
-`pyinstaller.exe --noconsole --onefile .\bin\rm102`
+```
+pyuic5 -o .\rm102\mainwindow.py mainwindow.ui
+pyuic5 -o .\rm102\help_dialog.py help_dialog.ui
+pyinstaller.exe --noconsole --onefile .\bin\rm102
+```

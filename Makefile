@@ -6,6 +6,7 @@ all:
 	pyuic5 -o rm102/help_dialog.py help_dialog.ui
 remove:
 	rm102/mainwindow.py
+	rm102/help_dialog.py
 install:
 	python3 -m pip install .
 uninstall:

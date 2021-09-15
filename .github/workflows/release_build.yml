@@ -1,0 +1,60 @@
+name: release build
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+
+  build_windows:
+
+    runs-on: windows-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+          python-version: "3.8"
+
+    - name: Install dependencies
+      shell: powershell
+      run: |
+          python -m pip install --upgrade pip
+          python -m pip install pyqt5 pyinstaller
+
+    - name: build with pyinstaller
+      shell: powershell
+      run: |
+        pyuic5 -o .\rm102\mainwindow.py mainwindow.ui
+        pyuic5 -o .\rm102\help_dialog.py help_dialog.ui
+        pyinstaller --noconsole --onefile .\bin/rm102
+
+    - name: upload exe artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: rm102_windows
+        path: dist/rm102.exe
+
+  upload_windows:    # separate job on Ubuntu since JasonEtco/upload-to-release@master only runs on Linux
+
+    needs: build_windows
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: download exe
+      uses: actions/download-artifact@v2
+      with:
+        name: rm102_windows
+
+    - name: upload exe to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: rm102.exe application/octet-stream
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    # token generated implicitly
